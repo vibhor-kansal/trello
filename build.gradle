@@ -18,7 +18,7 @@ plugins {
 }
 
 version "0.1"
-group "trello.api.coding.challenge"
+group "trello"
 
 apply plugin: "spring-boot"
 apply plugin: "war"
@@ -62,6 +62,14 @@ dependencies {
     compile "org.grails.plugins:cache"
     compile "org.hibernate:hibernate-ehcache"
     compile "org.grails.plugins:scaffolding"
+
+    compile('org.grails:grails-datastore-rest-client:4.0.0.RELEASE') {
+        exclude group: 'javax.servlet', module: 'javax.servlet-api'
+        exclude group: 'commons-codec', module: 'commons-codec'
+        exclude group: 'org.grails', module: 'grails-plugin-converters'
+        exclude group: 'org.grails', module: 'grails-core'
+        exclude group: 'org.grails', module: 'grails-web'
+    }
 
     runtime "org.grails.plugins:asset-pipeline"
 

@@ -12,7 +12,8 @@ spring:
     groovy:
         template:
             check-template-location: false
-
+    jmx:
+      enabled: false
 ---
 grails:
     mime:
@@ -72,10 +73,6 @@ hibernate:
         use_second_level_cache: true
         use_query_cache: false
         region.factory_class: 'org.hibernate.cache.ehcache.EhCacheRegionFactory'
-
-endpoints:
-    jmx:
-        unique-names: true
 
 dataSource:
     pooled: true

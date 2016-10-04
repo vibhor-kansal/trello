@@ -10,5 +10,9 @@ class UrlMappings {
         "/"(view:"/index")
         "500"(view:'/error')
         "404"(view:'/notFound')
+
+        "/api/trello"(controller: "trello", action: "getAllTrelloCards", method: "GET") {
+            format = "json"
+        }
     }
 }
