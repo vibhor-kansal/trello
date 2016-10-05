@@ -1,17 +1,22 @@
-package trello.controller.controllerRequest
+package trello.controller
 
 import grails.converters.JSON
-import grails.web.Controller
 import grails.web.RequestParameter
-import trello.impl.ItrelloCardService
+import trello.ItrelloService
+import trello.TrelloCard
+import trello.TrelloList
 
-@Controller
 class TrelloCardController {
 
-    ItrelloCardService trelloCardService
+    ItrelloService trelloService
 
-    public JSON getAllTrelloCards(@RequestParameter("boardId") Integer boardId) {
-        def cards = trelloCardService.getAllCardsOnMyBoard(boardId)
-        render cards as JSON
+    JSON getAllTrelloCards(@RequestParameter("boardId") Integer boardId) {
+        List<TrelloCard> trelloCardList = trelloService.getAllCardsOnMyBoard(boardId)
+        render trelloCardList
+    }
+
+    JSON getAllTrelloLists(@RequestParameter("boardId") Integer boardId) {
+        List<TrelloList> trelloLists = trelloService.getAllListsOnMyBoard(boardId)
+        render trelloLists
     }
 }

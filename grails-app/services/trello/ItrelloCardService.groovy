@@ -1,6 +1,7 @@
-package trello.impl
+package trello
 
 interface ItrelloCardService {
 
-    public def getAllCardsOnMyBoard(Integer boardId)
+    List<TrelloCard> getAllCardsOnMyBoard(Integer boardId)
+    List<TrelloList> getAllListsOnMyBoard(Integer boardId)
 }

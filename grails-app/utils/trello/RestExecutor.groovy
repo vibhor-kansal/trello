@@ -1,6 +1,6 @@
 package trello
-
 import grails.plugins.rest.client.RestBuilder
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,10 +16,9 @@ class RestExecutor {
         restBuilder = new RestBuilder()
 
         def response = restBuilder.get("${BASE_URL}/${apiEndpoint}?key=${TRELLO_AUTHENTICATION_KEY}&token=${TRELLO_AUTHENTICATION_TOKEN}") {
-            accept()
-            contentType("application/json")
+            accept(MediaType.APPLICATION_JSON_VALUE)
+            contentType(MediaType.APPLICATION_JSON_VALUE)
         }
         return response.json.toString()
     }
-
 }
