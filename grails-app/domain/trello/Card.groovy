@@ -1,15 +1,16 @@
 package trello
-
 import com.google.gson.annotations.SerializedName
 
-class TrelloList {
+class Card {
 
     @SerializedName("id")
     String id
     @SerializedName("name")
     String name
-    @SerializedName("idBoard")
-    String boardId
+    @SerializedName("url")
+    String url
     @SerializedName("closed")
     Boolean isClosed
+    @SerializedName("dateLastActivity")
+    Date lastActivity
 }
