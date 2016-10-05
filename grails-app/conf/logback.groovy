@@ -1,6 +1,8 @@
-import grails.util.BuildSettings
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder
+import ch.qos.logback.core.ConsoleAppender
+import ch.qos.logback.core.FileAppender
 import grails.util.Environment
-
+import static ch.qos.logback.classic.Level.ERROR
 // See http://logback.qos.ch/manual/groovy.html for details on configuration
 appender('STDOUT', ConsoleAppender) {
     encoder(PatternLayoutEncoder) {

@@ -5,6 +5,7 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
+        maven { url "http://download.java.net/maven/2" }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -14,11 +15,11 @@ buildscript {
 }
 
 plugins {
-    id "io.spring.dependency-management" version "0.5.4.RELEASE"
+    id "io.spring.dependency-management" version "0.5.2.RELEASE"
 }
 
-version "0.1"
-group "trello.api.coding.challenge"
+version ""
+group "trello"
 
 apply plugin: "spring-boot"
 apply plugin: "war"
@@ -40,7 +41,14 @@ assets {
 
 repositories {
     mavenLocal()
+    mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
+    maven {
+        url "http://repo.grails.org/grails/plugins"
+    }
+    maven {
+        url "https://repo1.maven.org"
+    }
 }
 
 dependencyManagement {
@@ -54,7 +62,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    provided "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.grails:grails-dependencies"
     compile "org.grails:grails-web-boot"
 
@@ -63,10 +71,20 @@ dependencies {
     compile "org.hibernate:hibernate-ehcache"
     compile "org.grails.plugins:scaffolding"
 
+    compile('org.grails:grails-datastore-rest-client:4.0.0.RELEASE') {
+        exclude group: 'javax.servlet', module: 'javax.servlet-api'
+        exclude group: 'commons-codec', module: 'commons-codec'
+        exclude group: 'org.grails', module: 'grails-plugin-converters'
+        exclude group: 'org.grails', module: 'grails-core'
+        exclude group: 'org.grails', module: 'grails-web'
+    }
+
     runtime "org.grails.plugins:asset-pipeline"
 
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails.plugins:geb"
+    testCompile 'com.jayway.restassured:rest-assured:2.5.0'
+    testCompile 'junit:junit:4.12'
 
     // Note: It is recommended to update to a more robust driver (Chrome, Firefox etc.)
     testRuntime 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.44.0'
