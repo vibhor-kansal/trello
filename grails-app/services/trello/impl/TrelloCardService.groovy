@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import trello.GsonHelper
 import trello.ItrelloCardService
 import trello.RestExecutor
-import trello.TrelloCard
-import trello.TrelloList
+import trello.Card
 
 @Transactional
 class TrelloCardService implements ItrelloCardService {
 
     private static final String BOARD_ID = "CMV0pT47"
-    private static final String LISTS_ENDPOINT = "lists"
     private static final String CARDS_ENDPOINT = "cards"
 
     @Autowired
@@ -23,24 +21,13 @@ class TrelloCardService implements ItrelloCardService {
     private GsonHelper gsonHelper
 
     @Override
-    List<TrelloCard> getAllCardsOnMyBoard(Integer boardId) {
-        List<TrelloCard> trelloCardList = new ArrayList<>()
+    List<Card> getAllCardsOnMyBoard(Integer boardId) {
+        List<Card> trelloCardList = new ArrayList<>()
         JSONArray jsonArray = (JSONArray)JSON.parse(restExecutor.getTrelloResponse("${BOARD_ID}/${CARDS_ENDPOINT}"))
         jsonArray.each { value ->
-            TrelloCard trelloCard = gsonHelper.mapJsonString(value.toString(), TrelloCard.class)
+            Card trelloCard = gsonHelper.mapJsonString(value.toString(), Card.class)
             trelloCardList << trelloCard
         }
         return trelloCardList
-    }
-
-    @Override
-    List<TrelloList> getAllListsOnMyBoard(Integer boardId) {
-        def trelloLists = []
-        JSONArray jsonArray = (JSONArray)JSON.parse(restExecutor.getTrelloResponse("${BOARD_ID}/${LISTS_ENDPOINT}"))
-        jsonArray.each { value ->
-            TrelloList trelloList = gsonHelper.mapJsonString(value.toString(), TrelloList.class)
-            trelloLists << trelloList
-        }
-        return trelloLists
     }
 }
