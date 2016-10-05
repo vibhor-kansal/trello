@@ -1,17 +1,16 @@
 package trello.impl
-
 import grails.converters.JSON
 import grails.transaction.Transactional
 import org.grails.web.json.JSONArray
 import org.springframework.beans.factory.annotation.Autowired
 import trello.GsonHelper
-import trello.ItrelloService
+import trello.ItrelloCardService
 import trello.RestExecutor
 import trello.TrelloCard
 import trello.TrelloList
 
 @Transactional
-class TrelloCardService implements ItrelloService {
+class TrelloCardService implements ItrelloCardService {
 
     private static final String BOARD_ID = "CMV0pT47"
     private static final String LISTS_ENDPOINT = "lists"
