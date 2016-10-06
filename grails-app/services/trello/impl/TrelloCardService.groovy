@@ -1,4 +1,5 @@
 package trello.impl
+
 import grails.converters.JSON
 import grails.transaction.Transactional
 import org.grails.web.json.JSONArray
@@ -24,7 +25,7 @@ class TrelloCardService implements ItrelloCardService {
     private final String CARD_ACTION_ENDPOINT = "actions"
     private final String IN_PROGRESS_STATE = "In Progress"
     private final String DONE_STATE = "Done"
-    private final String NOT_YET_DONE_MESSAGE = "Ticket is yet to move in Done bucket"
+    private final String CARD_NOT_YET_DONE_MESSAGE = "Card is yet to move in Done bucket"
 
     @Autowired
     private RestExecutor restExecutor
@@ -35,11 +36,11 @@ class TrelloCardService implements ItrelloCardService {
     @Override
     def getAllCardsOnMyBoard() {
         Map<Card, List<CardAction>> map = new HashMap<>()
-        JSONArray cardArray = (JSONArray)JSON.parse(restExecutor.getTrelloResponse("${BOARD_ENDPOINT}/${BOARD_ID}/${CARDS_ENDPOINT}"))
+        JSONArray cardArray = (JSONArray) JSON.parse(restExecutor.getTrelloResponse("${BOARD_ENDPOINT}/${BOARD_ID}/${CARDS_ENDPOINT}"))
         cardArray.each { cardValue ->
             Card card = gsonHelper.mapJsonString(cardValue.toString(), Card.class)
             List<CardAction> cardActionList = new ArrayList<>()
-            JSONArray cardActionArray = (JSONArray)JSON.parse(restExecutor.getTrelloResponse("${CARDS_ENDPOINT}/${card.id}/${CARD_ACTION_ENDPOINT}"))
+            JSONArray cardActionArray = (JSONArray) JSON.parse(restExecutor.getTrelloResponse("${CARDS_ENDPOINT}/${card.id}/${CARD_ACTION_ENDPOINT}"))
             cardActionArray.each { cardActionValue ->
                 CardAction cardAction = gsonHelper.mapJsonString(cardActionValue.toString(), CardAction.class)
                 cardActionList << cardAction
@@ -64,7 +65,7 @@ class TrelloCardService implements ItrelloCardService {
                 }
                 finalMap.put(key.name, getTimeDifference(startDate, endDate))
             } else {
-                finalMap.put(key.name, NOT_YET_DONE_MESSAGE)
+                finalMap.put(key.name, CARD_NOT_YET_DONE_MESSAGE)
             }
         }
         return finalMap
@@ -74,7 +75,11 @@ class TrelloCardService implements ItrelloCardService {
         DateTime dt1 = new DateTime(startDate)
         DateTime dt2 = new DateTime(endDate)
 
-        String actualTimeDifference = """${Days.daysBetween(dt1, dt2).getDays()} days, ${Hours.hoursBetween(dt1, dt2).getHours() % 24} hours, ${Minutes.minutesBetween(dt1, dt2).getMinutes() % 60} minutes, ${Seconds.secondsBetween(dt1, dt2).getSeconds() % 60} seconds"""
+        String actualTimeDifference = """${Days.daysBetween(dt1, dt2).getDays()} days, ${
+            Hours.hoursBetween(dt1, dt2).getHours() % 24
+        } hours, ${Minutes.minutesBetween(dt1, dt2).getMinutes() % 60} minutes, ${
+            Seconds.secondsBetween(dt1, dt2).getSeconds() % 60
+        } seconds"""
         return actualTimeDifference
     }
 }

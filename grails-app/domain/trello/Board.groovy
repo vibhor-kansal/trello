@@ -8,7 +8,4 @@ class Board {
     String id
     @SerializedName("name")
     String name
-    @SerializedName("shortLink")
-    String shortLink
-
 }
