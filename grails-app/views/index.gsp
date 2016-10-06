@@ -113,27 +113,25 @@
 
             <div id="controller-list" role="navigation">
                 <h2>Available Controllers:</h2>
-                <ul>
-                    <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-                        <li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-                    </g:each>
-                </ul>
-                <!--<button onclick="showCards()">Show</button>
+
+                <br>
+                <button onclick="showCards()">Show Card Details</button>
                 <ul id="cardList">
-                </ul>-->
+                </ul>
             </div>
         </div>
-        <!--<script type="text/javascript">
+        <script type="text/javascript">
             function showCards() {
                 $.ajax({
                     url: '/trelloCard/getAllTrelloCards',
                     method: 'GET'
                 }).done(function(data) {
-                    //var obj = JSON.parse(data);
-                    var obj = {"Use trello API":null, "Learn about Git":null, "Frontend challenge":null, "Coding Challenge":null};
+                    var str = JSON.stringify(data);
+                    var obj = JSON.parse(str);
+                    //var obj = {"Use trello API":null, "Learn about Git":null, "Frontend challenge":null, "Coding Challenge":null};
                     var lis = [];
-                     for (var key in obj) {
-                        lis.push('<li>' + key + ': ' + obj[key] +'</li>');
+                    for (var key in obj) {
+                        lis.push('<br> <li>' + key + ': ' + obj[key] +'</li>');
                     };
                     lis = lis.join('');
                     $('#cardList').html(lis);
@@ -141,6 +139,6 @@
                     console.log(err);
                 })
             }
-        </script>-->
+        </script>
     </body>
 </html>
