@@ -2,5 +2,5 @@ package trello
 
 interface ItrelloCardService {
 
-    List<Card> getAllCardsOnMyBoard(Integer boardId)
+    def getAllCardsOnMyBoard(Integer boardId)
 }
