@@ -75,6 +75,7 @@
                 }
             }
         </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     </head>
     <body>
         <a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
@@ -112,12 +113,32 @@
 
             <div id="controller-list" role="navigation">
                 <h2>Available Controllers:</h2>
-                <ul>
-                    <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-                        <li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-                    </g:each>
+
+                <br>
+                <button onclick="showCards()">Show Card Details</button>
+                <ul id="cardList">
                 </ul>
             </div>
         </div>
+        <script type="text/javascript">
+            function showCards() {
+                $.ajax({
+                    url: '/trelloCard/getAllTrelloCards',
+                    method: 'GET'
+                }).done(function(data) {
+                    var str = JSON.stringify(data);
+                    var obj = JSON.parse(str);
+                    //var obj = {"Use trello API":null, "Learn about Git":null, "Frontend challenge":null, "Coding Challenge":null};
+                    var lis = [];
+                    for (var key in obj) {
+                        lis.push('<br> <li>' + key + ': ' + obj[key] +'</li>');
+                    };
+                    lis = lis.join('');
+                    $('#cardList').html(lis);
+                }).fail(function(err) {
+                    console.log(err);
+                })
+            }
+        </script>
     </body>
 </html>

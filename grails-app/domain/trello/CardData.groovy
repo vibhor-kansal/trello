@@ -6,7 +6,7 @@ class CardData {
 
     @SerializedName("listAfter")
     CardStatus cardStatusAfterList
-    @SerializedName("listBeofre")
+    @SerializedName("listBefore")
     CardStatus cardStatusBeforeList
     @SerializedName("board")
     Board board
