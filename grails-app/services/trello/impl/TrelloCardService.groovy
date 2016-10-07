@@ -11,6 +11,7 @@ import org.joda.time.Seconds
 import org.springframework.beans.factory.annotation.Autowired
 import trello.Card
 import trello.CardAction
+import trello.CardPosition
 import trello.GsonHelper
 import trello.ItrelloCardService
 import trello.RestExecutor
@@ -25,7 +26,6 @@ class TrelloCardService implements ItrelloCardService {
     private final String CARD_ACTION_ENDPOINT = "actions"
     private final String IN_PROGRESS_STATE = "In Progress"
     private final String DONE_STATE = "Done"
-    private final String CARD_NOT_YET_DONE_MESSAGE = "Card is yet to move in Done bucket"
 
     @Autowired
     private RestExecutor restExecutor
@@ -35,7 +35,7 @@ class TrelloCardService implements ItrelloCardService {
 
     @Override
     def getAllCardsOnMyBoard() {
-        Map<Card, List<CardAction>> map = new HashMap<>()
+        Map<Card, List<CardAction>> cardMap = new HashMap<>()
         JSONArray cardArray = (JSONArray) JSON.parse(restExecutor.getTrelloResponse("${BOARD_ENDPOINT}/${BOARD_ID}/${CARDS_ENDPOINT}"))
         cardArray.each { cardValue ->
             Card card = gsonHelper.mapJsonString(cardValue.toString(), Card.class)
@@ -45,17 +45,21 @@ class TrelloCardService implements ItrelloCardService {
                 CardAction cardAction = gsonHelper.mapJsonString(cardActionValue.toString(), CardAction.class)
                 cardActionList << cardAction
             }
-            map.put(card, cardActionList)
+            cardMap.put(card, cardActionList)
         }
-        return getTimeTakenForEachCard(map)
+        return getTimeTakenForEachCard(cardMap)
     }
 
     private Map<String, String> getTimeTakenForEachCard(final Map<Card, List<CardAction>> map) {
-        Map<String, String> finalMap = new HashMap<>()
+        Map<String, String> finalTimeMap = new HashMap<>()
         Date startDate = new Date()
         Date endDate = new Date()
         map.each { key, value ->
-            if (restExecutor.getTrelloResponse("${CARDS_ENDPOINT}/${key.id}/${CARD_LIST_ENDPOINT}").contains(DONE_STATE)) {
+            String positionResponse = restExecutor.getTrelloResponse("${CARDS_ENDPOINT}/${key.id}/${CARD_LIST_ENDPOINT}")
+            CardPosition cardPosition = gsonHelper.mapJsonString(positionResponse, CardPosition.class)
+            if(!cardPosition.currentState.equals(DONE_STATE)) {
+                finalTimeMap.put(key.name, "Card is in ${cardPosition.currentState} bucket right now.")
+            } else {
                 value.each { cardAction ->
                     if (cardAction.cardData.cardStatusBeforeList.name.contains(IN_PROGRESS_STATE)) {
                         startDate = cardAction.date
@@ -63,21 +67,19 @@ class TrelloCardService implements ItrelloCardService {
                         endDate = cardAction.date
                     }
                 }
-                finalMap.put(key.name, getTimeDifference(startDate, endDate))
-            } else {
-                finalMap.put(key.name, CARD_NOT_YET_DONE_MESSAGE)
+                finalTimeMap.put(key.name, getTimeDifference(startDate, endDate))
             }
         }
-        return finalMap
+        return finalTimeMap
     }
 
     private String getTimeDifference(Date startDate, Date endDate) {
         DateTime dt1 = new DateTime(startDate)
         DateTime dt2 = new DateTime(endDate)
 
-        String actualTimeDifference = """${Days.daysBetween(dt1, dt2).getDays()} days, ${
+        String actualTimeDifference = """Time Taken to be done - ${Days.daysBetween(dt1, dt2).getDays()} days ${
             Hours.hoursBetween(dt1, dt2).getHours() % 24
-        } hours, ${Minutes.minutesBetween(dt1, dt2).getMinutes() % 60} minutes, ${
+        } hours ${Minutes.minutesBetween(dt1, dt2).getMinutes() % 60} minutes ${
             Seconds.secondsBetween(dt1, dt2).getSeconds() % 60
         } seconds"""
         return actualTimeDifference
