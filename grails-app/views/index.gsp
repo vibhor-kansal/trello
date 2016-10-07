@@ -112,10 +112,10 @@
                click on each to execute its default action:</p>
 
             <div id="controller-list" role="navigation">
-                <h2>Available Controllers:</h2>
+                <h2>Available Operations:</h2>
 
                 <br>
-                <button onclick="showCards()">Show Card Details</button>
+                <button onclick="showCards()">Show Card Tracking</button>
                 <ul id="cardList">
                 </ul>
             </div>
@@ -128,10 +128,9 @@
                 }).done(function(data) {
                     var str = JSON.stringify(data);
                     var obj = JSON.parse(str);
-                    //var obj = {"Use trello API":null, "Learn about Git":null, "Frontend challenge":null, "Coding Challenge":null};
                     var lis = [];
                     for (var key in obj) {
-                        lis.push('<br> <li>' + key + ': ' + obj[key] +'</li>');
+                        lis.push('<br> <li> <b>' + key + ' </b> : ' + obj[key] +'</li>');
                     };
                     lis = lis.join('');
                     $('#cardList').html(lis);
