@@ -36,7 +36,9 @@ Shows the time taken for a card to move from In-progress to Done.
 
     Set Java Home in source file
 
-####Grails - 3.0.15
+####Grails
+
+     Preferably 3.0.15
     
     **Setting up Grails 3.0.15 on Ubuntu**
 
