@@ -3,7 +3,7 @@
 It shows the card tracking details for a given trello kanban board.
 Shows the time taken for a card to move from In-progress to Done.
 
-##Pre-requisites
+##Pre-requisites and Technologies used
 
 ####Ubuntu 
 
@@ -64,7 +64,7 @@ Shows the time taken for a card to move from In-progress to Done.
     
     $ git clone git@github.com:vibhor-webonise/trello.git
     
-####Running the project
+###Running the project
 
     Go to project directory and try below commands
     
