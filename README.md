@@ -79,4 +79,4 @@ Shows the time taken for a card to move from In-progress to Done.
     Try this url in your browser
     You will see a button on the page saying "Show Card Tracking"
     By clicking the button you will be able to see all the cards 
-    on the kanban voard with their respective progress.
+    on the kanban board with their respective progress.
