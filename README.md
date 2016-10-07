@@ -11,6 +11,8 @@ Shows the time taken for a card to move from In-progress to Done.
     
 ####Git
 
+    To clone the project on your system
+    
     $ sudo apt-get update
     $ sudo apt-get install git
 
